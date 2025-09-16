@@ -7,23 +7,22 @@ import { initializeTheme } from './hooks/use-appearance';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
+function resolveInertiaPage(name: string) {
+    const pages = import.meta.glob('./pages/**/*.tsx');
+
+    // find a page that matches either flat or nested index
+    const match = Object.keys(pages).find((path) => path.endsWith(`${name}.tsx`) || path.endsWith(`${name}/index.tsx`));
+
+    if (!match) throw new Error(`Page not found: ${name}`);
+
+    return resolvePageComponent(match, pages);
+}
+
 createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),
-    resolve: (name) => {
-        const pages = import.meta.glob('./pages/**/*.tsx');
-
-        const flat = `./pages/${name}.tsx`;
-        if (pages[flat]) return resolvePageComponent(flat, pages);
-
-        const nested = `./pages/${name}/index.tsx`;
-        if (pages[nested]) return resolvePageComponent(nested, pages);
-
-        throw new Error(`Page not found: ${name}`);
-    },
+    resolve: (name) => resolveInertiaPage(name),
     setup({ el, App, props }) {
-        const root = createRoot(el);
-
-        root.render(<App {...props} />);
+        createRoot(el).render(<App {...props} />);
     },
     progress: {
         color: '#4B5563',

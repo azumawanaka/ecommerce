@@ -13,7 +13,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 
     Route::get('products', function () {
-        return Inertia::render('products');
+        return Inertia::render('products/index');
     })->name('products');
 });
 

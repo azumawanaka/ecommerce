@@ -12,7 +12,7 @@ import { cn } from '@/lib/utils';
 import { dashboard, products } from '@/routes';
 import { type BreadcrumbItem, type NavItem, type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid, Menu, Search } from 'lucide-react';
+import { BookOpen, Folder, LayoutGrid, Menu, Package, Search } from 'lucide-react';
 import AppLogo from './app-logo';
 import AppLogoIcon from './app-logo-icon';
 
@@ -24,8 +24,15 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Products',
-        href: products(),
-        icon: LayoutGrid,
+        icon: Package,
+        isDropdown: true,
+        children: [
+            {
+                title: 'All Products',
+                href: products(),
+                icon: Package,
+            },
+        ],
     },
 ];
 
