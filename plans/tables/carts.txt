@@ -112,7 +112,7 @@ Snapshot of products purchased (in case product data changes later).
 | updated_at     | TIMESTAMP       | —                                                           |
 
 
-📦 Inventory / Stocks Table (inventory_stocks) - 
+📦 Inventory / Stocks Table (inventory_stocks) - done
 Tracks how much stock is available per product/variant.
 | Column         | Type          | Notes                                      |
 |----------------|---------------|--------------------------------------------|
@@ -124,7 +124,7 @@ Tracks how much stock is available per product/variant.
 | created_at     | TIMESTAMP     | —                                          |
 | updated_at     | TIMESTAMP     | —                                          |
 
-🚚 Shipments / Delivery Tracking (shipments)
+🚚 Shipments / Delivery Tracking (shipments) - done
 Stores shipping carrier + tracking info for each order.
 | Column          | Type          | Notes                                       |
 |-----------------|---------------|---------------------------------------------|
@@ -138,7 +138,7 @@ Stores shipping carrier + tracking info for each order.
 | created_at      | TIMESTAMP     | —                                           |
 | updated_at      | TIMESTAMP     | —                                           |
 
-🎟 Coupons / Discounts (coupons)
+🎟 Coupons / Discounts (coupons) - 
 Optional, but important for marketing campaigns.
 | Column       | Type          | Notes                                         |
 |--------------|---------------|-----------------------------------------------|
