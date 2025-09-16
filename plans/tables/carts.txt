@@ -38,7 +38,7 @@ Optional, but very common.
 | `created_at` | TIMESTAMP   | —                        |
 
 3️⃣ Checkout & Orders
-Orders Table (orders) - 
+Orders Table (orders) - done
 Core table storing order-level details.
 | Column                | Type                    | Notes                                              |
 | --------------------- | ----------------------- | -------------------------------------------------- |
@@ -58,14 +58,14 @@ Core table storing order-level details.
 | `created_at`          | TIMESTAMP               | —                                                  |
 | `updated_at`          | TIMESTAMP               | —                                                  |
 
-Order Items Table (order_items)
+Order Items Table (order_items) - done
 Snapshot of products purchased (in case product data changes later).
 | Column         | Type                  | Notes                      |
 | -------------- | --------------------- | -------------------------- |
 | `id`           | BIGINT (PK)           | —                          |
 | `order_id`     | BIGINT (FK)           | Belongs to order           |
 | `product_id`   | BIGINT (FK)           | —                          |
-| `variant_id`   | BIGINT (FK, nullable) | —                          |
+| `product_variant_id` | BIGINT (FK, nullable) | —                          |
 | `product_name` | VARCHAR(255)          | Store snapshot (immutable) |
 | `sku`          | VARCHAR(100)          | Store snapshot             |
 | `price`        | DECIMAL(10,2)         | Snapshot price             |
@@ -73,7 +73,7 @@ Snapshot of products purchased (in case product data changes later).
 | `subtotal`     | DECIMAL(10,2)         | price × quantity           |
 | `created_at`   | TIMESTAMP             | —                          |
 
-4️⃣ Shipping & Billing
+4️⃣ Shipping & Billing - done
 📦 order_addresses (snapshot of shipping/billing at checkout)
 | Column          | Type                        | Notes                  |
 | --------------- | --------------------------- | ---------------------- |
