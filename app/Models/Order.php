@@ -62,4 +62,9 @@ class Order extends Model
     {
         return $this->belongsTo(OrderAddress::class, 'billing_address_id');
     }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class);
+    }
 }

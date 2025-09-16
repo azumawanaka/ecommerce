@@ -52,4 +52,9 @@ class ProductVariant extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
+
+    public function inventoryStock(): HasMany
+    {
+        return $this->hasMany(InventoryStock::class, 'product_variant_id', 'id');
+    }
 }

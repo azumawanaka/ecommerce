@@ -95,3 +95,82 @@ Snapshot of products purchased (in case product data changes later).
 - At checkout → user picks addresses from user_addresses.
 - System copies that data into order_addresses as shipping and/or billing.
 - Even if user edits/deletes the original user_addresses, the order_addresses stay unchanged for history.
+
+📑 Payments Table (payments) - done
+| Column         | Type            | Notes                                                       |
+|----------------|-----------------|-------------------------------------------------------------|
+| id             | BIGINT (PK)     | —                                                           |
+| order_id       | BIGINT (FK)     | Belongs to `orders`                                         |
+| provider       | VARCHAR(100)    | e.g. Stripe, PayPal, COD, GCash                             |
+| transaction_id | VARCHAR(255)    | Gateway reference ID (nullable for COD)                     |
+| amount         | DECIMAL(10,2)   | Payment amount (can be partial or full)                     |
+| currency       | VARCHAR(10)     | e.g. USD, PHP, EUR (optional but useful if multi-currency)  |
+| status         | ENUM            | e.g. pending, success, failed, refunded                     |
+| paid_at        | TIMESTAMP       | When payment was confirmed (nullable until success)          |
+| metadata       | JSON (nullable) | Gateway response details (auth codes, error messages, etc.) |
+| created_at     | TIMESTAMP       | —                                                           |
+| updated_at     | TIMESTAMP       | —                                                           |
+
+
+📦 Inventory / Stocks Table (inventory_stocks) - 
+Tracks how much stock is available per product/variant.
+| Column         | Type          | Notes                                      |
+|----------------|---------------|--------------------------------------------|
+| id             | BIGINT (PK)   | —                                          |
+| product_id     | BIGINT (FK)   | Belongs to products                        |
+| product_variant_id     | BIGINT (FK)   | Nullable if no variants                    |
+| quantity       | INT           | Current available stock                    |
+| reserved       | INT           | Reserved for pending carts/orders          |
+| created_at     | TIMESTAMP     | —                                          |
+| updated_at     | TIMESTAMP     | —                                          |
+
+🚚 Shipments / Delivery Tracking (shipments)
+Stores shipping carrier + tracking info for each order.
+| Column          | Type          | Notes                                       |
+|-----------------|---------------|---------------------------------------------|
+| id              | BIGINT (PK)   | —                                           |
+| order_id        | BIGINT (FK)   | Belongs to orders                           |
+| carrier         | VARCHAR(100)  | e.g., DHL, FedEx, Lalamove                  |
+| tracking_number | VARCHAR(255)  | Provided by carrier                         |
+| status          | ENUM          | pending, in_transit, delivered, returned    |
+| shipped_at      | TIMESTAMP     | When shipment created                       |
+| delivered_at    | TIMESTAMP     | When confirmed delivered                    |
+| created_at      | TIMESTAMP     | —                                           |
+| updated_at      | TIMESTAMP     | —                                           |
+
+🎟 Coupons / Discounts (coupons)
+Optional, but important for marketing campaigns.
+| Column       | Type          | Notes                                         |
+|--------------|---------------|-----------------------------------------------|
+| id           | BIGINT (PK)   | —                                             |
+| code         | VARCHAR(50)   | Coupon code                                   |
+| type         | ENUM          | fixed, percent                                |
+| value        | DECIMAL(10,2) | Discount value                                |
+| min_order    | DECIMAL(10,2) | Minimum order amount required                 |
+| max_discount | DECIMAL(10,2) | Max discount (for percentage)                 |
+| usage_limit  | INT           | How many times coupon can be used             |
+| used_count   | INT           | Counter                                       |
+| starts_at    | TIMESTAMP     | Valid from                                    |
+| ends_at      | TIMESTAMP     | Valid until                                   |
+| status       | ENUM          | active, inactive, expired                     |
+| created_at   | TIMESTAMP     | —                                             |
+| updated_at   | TIMESTAMP     | —                                             |
+
+🛡 Refunds (Optional but recommended) (refunds)
+Keeps refunds separate from payments for cleaner auditing.
+| Column          | Type          | Notes                                        |
+|-----------------|---------------|----------------------------------------------|
+| id              | BIGINT (PK)   | —                                            |
+| payment_id      | BIGINT (FK)   | Which payment this refund belongs to         |
+| amount          | DECIMAL(10,2) | Refund amount                                |
+| reason          | TEXT          | Customer/admin reason                        |
+| status          | ENUM          | pending, approved, rejected, completed       |
+| refunded_at     | TIMESTAMP     | When refund processed                        |
+| created_at      | TIMESTAMP     | —                                            |
+| updated_at      | TIMESTAMP     | —                                            |
+
+📋 Summary (needed next after payments)
+- Inventory Stocks → prevent overselling.
+- Shipments / Delivery Tracking → handle logistics.
+- Coupons / Discounts → marketing & promotions.
+- Refunds (optional now, but good for scalability).
