@@ -1,0 +1,36 @@
+✅ Core domain covered:
+1. Catalog / Products
+    - Product, ProductImage, ProductVariant, ProductVariantAttribute, Brand, Category, Attribute, AttributeValue
+2. Cart & Wishlist
+    - Cart, CartItem, WishList
+3. Checkout / Orders
+    - Order, OrderItem, OrderAddress
+4. Payments & Shipments
+    - Payment, Shipment
+5. Inventory
+    - InventoryStock
+6. Marketing
+    - Coupon
+
+👉 Browsing products, variants, categories, brands
+👉 Adding to cart + wishlist
+👉 Placing orders (with addresses, payments, shipments)
+👉 Managing stock & applying coupons
+
+CRUD flow:
+1. Foundations
+    - Categories
+    - Brands
+    - Attributes + AttributeValues
+2. Products
+    - Product CRUD (with images)
+    - Product Variants + Variant Attributes
+    - Inventory Stock (linked to products/variants)
+3. Cart & Wishlist
+    - Manageable mostly from frontend, but in BO you might just view.
+4. Orders
+    - Orders (with items & addresses)
+    - Payments
+    - Shipments
+5. Promotions
+    - Coupons

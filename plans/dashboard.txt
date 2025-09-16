@@ -1,0 +1,68 @@
+1. Catalog / Products
+Dashboard Section: Products
+Pages / Modules:
+    - Categories → CRUD categories, view hierarchy
+    - Brands → CRUD brands
+    - Attributes & AttributeValues → CRUD product attributes (e.g., color, size) and their possible values
+    - Products → CRUD products, manage product images
+    - Product Variants → Manage variants for products (linked to attributes)
+    - Inventory Stock → Manage stock per product/variant
+
+Notes:
+- “Inventory Stock” can be a sub-tab under the product/variant page.
+- Consider showing quick stats: low stock alerts, total products per category, etc.
+
+2. Cart & Wishlist
+Dashboard Section: Customer Activities (or Shopping)
+Pages / Modules:
+    - Carts → View current carts of users (optional, read-only)
+    - Wishlist → View users’ wishlist items (optional, read-only)
+
+Notes:
+- Usually read-only in admin; mostly used for support or analytics.
+
+3. Orders / Checkout
+Dashboard Section: Orders
+Pages / Modules:
+    - Orders → List, filter, view details
+    - Include Order Items and Order Addresses in order details
+    - Payments → Show payment status, transactions, payment methods
+    - Shipments → Track shipment status, logistics info
+
+Notes:
+- Consider integrating status filters: pending, paid, shipped, completed, cancelled.
+- Could merge Payments & Shipments as sub-tabs under each Order.
+
+4. Marketing / Promotions
+Dashboard Section: Marketing
+Pages / Modules:
+    - Coupons → Create, edit, view coupon usage
+    - (Future) Promotions, Banners, Discounts
+
+5. Inventory Management
+    - Dashboard Section: Could be merged under Products or separate as Inventory
+    - Inventory Stock → If you want dedicated inventory management (stock transfers, low stock alerts)
+
+
+Dashboard Menu Layout:
+Dashboard
+├─ Products
+│  ├─ Categories
+│  ├─ Brands
+│  ├─ Attributes
+│  ├─ Products
+│  │   └─ Product Variants
+│  └─ Inventory Stock
+├─ Orders
+│  ├─ Orders
+│  ├─ Payments
+│  └─ Shipments
+├─ Customer Activities
+│  ├─ Carts
+│  └─ Wishlists
+├─ Marketing
+│  └─ Coupons
+
+Optional improvements:
+- Add Reports / Analytics section later for sales, stock levels, coupon usage, etc.
+- Use badges for counts: e.g., “New Orders (5)” or “Low Stock (12)”.
