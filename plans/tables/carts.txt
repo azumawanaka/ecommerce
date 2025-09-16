@@ -1,0 +1,97 @@
+1️⃣ Cart System
+🛒 Cart Table (carts) - done
+Stores cart sessions (for logged-in users, or guest session IDs).
+| Column       | Type                   | Notes           |
+| ------------ | ---------------------- | --------------- |
+| `id`         | BIGINT (PK)            | —               |
+| `user_id`    | BIGINT (FK, nullable)  | If logged in    |
+| `created_at` | TIMESTAMP              | —               |
+| `updated_at` | TIMESTAMP              | —               |
+👉 You’ll only ever query the active cart per user_id OR session_id.                                              |
+
+🛒 Cart Items Table (cart_items) - done
+| Column       | Type                  | Notes                                      |
+| ------------ | --------------------- | ------------------------------------------ |
+| `id`         | BIGINT (PK)           | —                                          |
+| `cart_id`    | BIGINT (FK)           | Belongs to `carts`                         |
+| `product_id` | BIGINT (FK)           | Main product                               |
+| `product_variant_id` | BIGINT (FK, nullable) | If product has variants            |
+| `quantity`   | INT                   | Quantity in cart                           |
+| `price`      | DECIMAL(10,2)         | Snapshot price (at time of adding to cart) |
+| `created_at` | TIMESTAMP             | —                                          |
+| `updated_at` | TIMESTAMP             | —                                          |
+
+✅ Flow with One Cart
+- Guest adds product → React stores locally with session_id.
+- On login → cart merges into user’s cart (user_id).
+- User updates/removes items → changes cart_items.
+- Checkout → copy cart data into orders + order_items.
+- Clear cart after order is placed.
+
+2️⃣ Wishlist Table (wishlists) - done
+Optional, but very common.
+| Column       | Type        | Notes                    |
+| ------------ | ----------- | ------------------------ |
+| `id`         | BIGINT (PK) | —                        |
+| `user_id`    | BIGINT (FK) | Wishlist belongs to user |
+| `product_id` | BIGINT (FK) | Product wished           |
+| `created_at` | TIMESTAMP   | —                        |
+
+3️⃣ Checkout & Orders
+Orders Table (orders) - 
+Core table storing order-level details.
+| Column                | Type                    | Notes                                              |
+| --------------------- | ----------------------- | -------------------------------------------------- |
+| `id`                  | BIGINT (PK)             | —                                                  |
+| `user_id`             | BIGINT (FK, nullable)   | If guest checkout, nullable                        |
+| `status`              | ENUM / VARCHAR          | e.g., pending, paid, shipped, delivered, cancelled |
+| `total_amount`        | DECIMAL(10,2)           | Final total                                        |
+| `subtotal_amount`     | DECIMAL(10,2)           | Before tax/shipping/discount                       |
+| `discount_amount`     | DECIMAL(10,2, nullable) | Coupon/discount                                    |
+| `shipping_amount`     | DECIMAL(10,2)           | Shipping fee                                       |
+| `tax_amount`          | DECIMAL(10,2)           | Tax applied                                        |
+| `payment_status`      | ENUM / VARCHAR          | pending, paid, failed, refunded                    |
+| `payment_method`      | VARCHAR(100)            | COD, PayPal, Stripe, etc.                          |
+| `shipping_address_id` | BIGINT (FK)             | From user\_addresses FK -> order_addresses.id      |
+| `billing_address_id`  | BIGINT (FK)             | From user\_addresses FK -> order_addresses.id      |
+| `placed_at`           | TIMESTAMP               | When order placed                                  |
+| `created_at`          | TIMESTAMP               | —                                                  |
+| `updated_at`          | TIMESTAMP               | —                                                  |
+
+Order Items Table (order_items)
+Snapshot of products purchased (in case product data changes later).
+| Column         | Type                  | Notes                      |
+| -------------- | --------------------- | -------------------------- |
+| `id`           | BIGINT (PK)           | —                          |
+| `order_id`     | BIGINT (FK)           | Belongs to order           |
+| `product_id`   | BIGINT (FK)           | —                          |
+| `variant_id`   | BIGINT (FK, nullable) | —                          |
+| `product_name` | VARCHAR(255)          | Store snapshot (immutable) |
+| `sku`          | VARCHAR(100)          | Store snapshot             |
+| `price`        | DECIMAL(10,2)         | Snapshot price             |
+| `quantity`     | INT                   | Ordered quantity           |
+| `subtotal`     | DECIMAL(10,2)         | price × quantity           |
+| `created_at`   | TIMESTAMP             | —                          |
+
+4️⃣ Shipping & Billing
+📦 order_addresses (snapshot of shipping/billing at checkout)
+| Column          | Type                        | Notes                  |
+| --------------- | --------------------------- | ---------------------- |
+| `id`            | BIGINT (PK)                 | —                      |
+| `order_id`      | BIGINT (FK)                 | Belongs to `orders`    |
+| `type`          | ENUM(`shipping`, `billing`) | Role of the address    |
+| `full_name`     | VARCHAR(255)                | Recipient name         |
+| `phone`         | VARCHAR(50)                 | Contact number         |
+| `address_line1` | VARCHAR(255)                | Street                 |
+| `address_line2` | VARCHAR(255, nullable)      | Apartment, suite, etc. |
+| `city`          | VARCHAR(100)                | —                      |
+| `state`         | VARCHAR(100)                | —                      |
+| `postal_code`   | VARCHAR(20)                 | —                      |
+| `country`       | VARCHAR(100)                | —                      |
+| `created_at`    | TIMESTAMP                   | —                      |
+| `updated_at`    | TIMESTAMP                   | —                      |
+
+🛠 Workflow
+- At checkout → user picks addresses from user_addresses.
+- System copies that data into order_addresses as shipping and/or billing.
+- Even if user edits/deletes the original user_addresses, the order_addresses stay unchanged for history.

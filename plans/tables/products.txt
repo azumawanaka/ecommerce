@@ -1,0 +1,94 @@
+Products Table (products) - done
+| Column              | Type                    | Notes                                                 |
+| ------------------- | ----------------------- | ----------------------------------------------------- |
+| `id`                | BIGINT (PK)             | Primary key                                           |
+| `name`              | VARCHAR(255)            | Product title                                         |
+| `slug`              | VARCHAR(255)            | SEO-friendly URL                                      |
+| `description`       | TEXT                    | Long description                                      |
+| `short_description` | TEXT (nullable)         | For listing / preview                                 |
+| `category_id`       | BIGINT (FK)             | Relation to `categories`                              |
+| `brand_id`          | BIGINT (FK, nullable)   | If using brands                                       |
+| `price`             | DECIMAL(10,2)           | Base price                                            |
+| `sale_price`        | DECIMAL(10,2, nullable) | Discounted price                                      |
+| `stock_quantity`    | INT                     | Inventory count (optional if you manage via variants) |
+| `sku`               | VARCHAR(100)            | Stock keeping unit                                    |
+| `is_active`         | BOOLEAN                 | Active / inactive                                     |
+| `is_featured`       | BOOLEAN                 | For promotions / homepage                             |
+| `meta_title`        | VARCHAR(255, nullable)  | SEO                                                   |
+| `meta_description`  | VARCHAR(255, nullable)  | SEO                                                   |
+| `created_at`        | TIMESTAMP               | —                                                     |
+| `updated_at`        | TIMESTAMP               | —                                                     |
+
+Brands Table (brands) - done
+| Column        | Type                   | Notes                          |
+| ------------- | ---------------------- | ------------------------------ |
+| `id`          | BIGINT (PK)            | Primary key                    |
+| `name`        | VARCHAR(255)           | Brand name (e.g., Nike, Apple) |
+| `slug`        | VARCHAR(255)           | SEO-friendly URL               |
+| `logo_url`    | VARCHAR(255, nullable) | Logo image path/URL            |
+| `description` | TEXT (nullable)        | Brand info / story             |
+| `website_url` | VARCHAR(255, nullable) | External link if needed        |
+| `is_active`   | BOOLEAN                | Enable/disable brand           |
+| `created_at`  | TIMESTAMP              | —                              |
+| `updated_at`  | TIMESTAMP              | —                              |
+
+Categories Table (categories) - done
+| Column        | Type                  | Notes                              |
+| ------------- | --------------------- | ---------------------------------- |
+| `id`          | BIGINT (PK)           | —                                  |
+| `name`        | VARCHAR(255)          | Category name                      |
+| `slug`        | VARCHAR(255)          | SEO URL                            |
+| `description` | TEXT (nullable)       | Optional                           |
+| `created_at`  | TIMESTAMP             | —                                  |
+| `updated_at`  | TIMESTAMP             | —                                  |
+
+Product Attributes Table (attributes) - done
+| Column       | Type         | Notes                                  |
+| ------------ | ------------ | -------------------------------------- |
+| `id`         | BIGINT (PK)  | —                                      |
+| `name`       | VARCHAR(100) | Attribute name (Size, Color, Material) |
+| `slug`       | VARCHAR(100) | For API/UI use                         |
+| `created_at` | TIMESTAMP    | —                                      |
+| `updated_at` | TIMESTAMP    | —                                      |
+
+Attribute Values Table (attribute_values) - done
+| Column         | Type         | Notes                         |
+| -------------- | ------------ | ----------------------------- |
+| `id`           | BIGINT (PK)  | —                             |
+| `attribute_id` | BIGINT (FK)  | Link to `attributes`          |
+| `value`        | VARCHAR(100) | E.g., Red, Blue, Small, Large |
+| `slug`         | VARCHAR(100) | For frontend filters          |
+| `created_at`   | TIMESTAMP    | —                             |
+| `updated_at`   | TIMESTAMP    | —                             |
+
+Product Variants Table (product_variants) - done
+| Column           | Type                    | Notes                                     |
+| ---------------- | ----------------------- | ----------------------------------------- |
+| `id`             | BIGINT (PK)             | —                                         |
+| `product_id`     | BIGINT (FK)             | Belongs to `products`                     |
+| `sku`            | VARCHAR(100)            | Unique per variant                        |
+| `price`          | DECIMAL(10,2)           | Variant price (can override product base) |
+| `sale_price`     | DECIMAL(10,2, nullable) | Discounted price                          |
+| `stock_quantity` | INT                     | Variant-specific stock                    |
+| `is_active`      | BOOLEAN                 | —                                         |
+| `created_at`     | TIMESTAMP               | —                                         |
+| `updated_at`     | TIMESTAMP               | —                                         |
+
+Product Variant Attribute Pivot (product_variant_attributes) - done
+| Column               | Type        | Notes                        |
+| -------------------- | ----------- | ---------------------------- |
+| `id`                 | BIGINT (PK) | —                            |
+| `product_variant_id` | BIGINT (FK) | Variant ID                   |
+| `attribute_value_id` | BIGINT (FK) | Value (e.g., “Red”, “Large”) |
+
+Product Images Table (product_images) - done
+| Column       | Type                  | Notes                                           |
+| ------------ | --------------------- | ----------------------------------------------- |
+| `id`         | BIGINT (PK)           | —                                               |
+| `product_id` | BIGINT (FK)           | Related product                                 |
+| `variant_id` | BIGINT (FK, nullable) | Specific to a variant (e.g., Red T-shirt image) |
+| `url`        | VARCHAR(255)          | Image URL                                       |
+| `is_main`    | BOOLEAN               | Main/cover image                                |
+| `position`   | INT                   | Ordering                                        |
+| `created_at` | TIMESTAMP             | —                                               |
+| `updated_at` | TIMESTAMP             | —                                               |
